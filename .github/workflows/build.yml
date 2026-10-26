@@ -46,7 +46,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "build-${{ github.run_number }}" KAKORO-INJECTOR.apk \
+          gh release create "build-${{ github.run_number }}-${{ github.run_attempt }}" KAKORO-INJECTOR.apk \
             --title "Build ${{ github.run_number }}" \
             --notes "Debug APK" \
             --repo "${{ github.repository }}"
