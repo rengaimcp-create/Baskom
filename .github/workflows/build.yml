@@ -22,9 +22,20 @@ jobs:
 
       - name: Extract source zip
         run: |
+          z=$(find . -iname '*.zip' -not -path './.git/*' | head -n 1)
+          if [ -z "$z" ]; then
+            echo "Tidak ada file zip di repo. Isi repo:"
+            find . -maxdepth 2 -not -path './.git/*'
+            exit 1
+          fi
+          echo "Memakai zip: $z"
           mkdir -p /tmp/proj
-          unzip -q KAKORO_INJECTOR_source.zip -d /tmp/proj
+          unzip -q "$z" -d /tmp/proj
           f=$(find /tmp/proj -name settings.gradle.kts | head -n 1)
+          if [ -z "$f" ]; then
+            echo "settings.gradle.kts tidak ada di dalam zip"
+            exit 1
+          fi
           echo "PROJ_DIR=$(dirname "$f")" >> "$GITHUB_ENV"
 
       - name: Build debug APK
